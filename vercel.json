@@ -2,22 +2,23 @@
   "version": 2,
   "builds": [
     {
-      "src": "index.html",
+      "src": "public/index.html",
       "use": "@vercel/static"
     },
     {
-      "src": "api/*.js",
+      "src": "api/assign-code.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/",
-      "dest": "index.html"
+      "src": "/api/assign-code",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "dest": "/api/assign-code.js"
     },
     {
-      "src": "/api/.*",
-      "dest": "api/assign-code.js"
+      "src": "/",
+      "dest": "/index.html"
     }
   ]
 }
