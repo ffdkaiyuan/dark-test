@@ -4,7 +4,13 @@ module.exports = (req, res) => {
   // CORS 头
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');
+  res.setHeader('Access-Control-Max-Age', '86400');
+  
+  // 添加这些头，防止被拒绝
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
   
   if (req.method === 'OPTIONS') {
     res.status(200).end();
@@ -36,9 +42,9 @@ module.exports = (req, res) => {
   if (urlCode) {
     const upperCode = urlCode.toUpperCase();
     if (codePool.includes(upperCode)) {
-      res.json({ success: true, code: upperCode });
+      res.status(200).json({ success: true, code: upperCode });
     } else {
-      res.json({ success: false, message: '兑换码无效' });
+      res.status(200).json({ success: false, message: '兑换码无效' });
     }
     return;
   }
@@ -46,5 +52,5 @@ module.exports = (req, res) => {
   const randomIndex = Math.floor(Math.random() * codePool.length);
   const code = codePool[randomIndex];
   
-  res.json({ success: true, code: code });
+  res.status(200).json({ success: true, code: code });
 };
