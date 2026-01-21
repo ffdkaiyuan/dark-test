@@ -638,9 +638,9 @@
             <div class="tips">
                 <div class="tips-title">💡 使用说明</div>
                 <div class="tips-text">
-                    1. 购买后自动获取兑换码<br>
-                    2. 输入兑换码开始测试<br>
-                    3. 一个兑换码仅限一台设备<br>
+                    1. 购买后直接点击链接进入<br>
+                    2. 系统自动分配兑换码<br>
+                    3. 点击开始探索即可测试<br>
                     4. 24小时内可重复测试
                 </div>
             </div>
@@ -706,9 +706,62 @@
 
     <script>
         var VALID_CODES = {
+            // 演示码（测试用）
             'TEST-1234-5678': { used: false, deviceId: null, activateTime: null },
             'FREE-0000-0001': { used: false, deviceId: null, activateTime: null },
-            'DEMO-9999-9999': { used: false, deviceId: null, activateTime: null }
+            'DEMO-9999-9999': { used: false, deviceId: null, activateTime: null },
+            
+            // 销售兑换码（A001批次）
+            'A001-0001-0001': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0002': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0003': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0004': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0005': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0006': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0007': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0008': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0009': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0010': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0011': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0012': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0013': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0014': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0015': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0016': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0017': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0018': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0019': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0020': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0021': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0022': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0023': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0024': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0025': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0026': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0027': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0028': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0029': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0030': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0031': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0032': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0033': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0034': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0035': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0036': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0037': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0038': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0039': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0040': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0041': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0042': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0043': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0044': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0045': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0046': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0047': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0048': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0049': { used: false, deviceId: null, activateTime: null },
+            'A001-0001-0050': { used: false, deviceId: null, activateTime: null }
         };
 
         var questions = [
@@ -992,6 +1045,19 @@
             createStars();
             deviceId = generateDeviceId();
             
+            // 1. 检查URL参数中的兑换码（用于手动分发场景）
+            var urlParams = new URLSearchParams(window.location.search);
+            var urlCode = urlParams.get('code');
+            
+            if (urlCode) {
+                var codeInput = document.getElementById('codeInput');
+                codeInput.value = urlCode.toUpperCase();
+                codeInput.disabled = true;
+                console.log('URL兑换码已自动填充:', urlCode);
+                return;
+            }
+            
+            // 2. 检查localStorage中的激活状态（返回用户）
             var savedData = localStorage.getItem('dark_test_activation');
             if (savedData) {
                 try {
@@ -1001,6 +1067,8 @@
                     if (now - activationData.activateTime < expireTime) {
                         document.getElementById('codeInput').value = activationData.code;
                         document.getElementById('codeInput').disabled = true;
+                        console.log('返回用户，使用已分配的兑换码:', activationData.code);
+                        return;
                     } else {
                         localStorage.removeItem('dark_test_activation');
                         activationData = null;
@@ -1008,6 +1076,23 @@
                 } catch (e) {
                     console.error('解析激活数据失败', e);
                 }
+            }
+            
+            // 3. 新用户自动分配兑换码（全自动场景）
+            // 当用户通过通用链接访问时，系统自动分配未使用的兑换码
+            var unusedCode = findUnusedCode();
+            if (unusedCode) {
+                var success = assignCodeToUser(unusedCode);
+                if (success) {
+                    var codeInput = document.getElementById('codeInput');
+                    codeInput.value = unusedCode;
+                    codeInput.disabled = true;
+                    console.log('系统自动分配兑换码:', unusedCode);
+                } else {
+                    console.error('兑换码分配失败');
+                }
+            } else {
+                console.warn('所有兑换码已分配完毕');
             }
         };
 
@@ -1021,6 +1106,39 @@
             }
             
             input.value = parts.join('-').substring(0, 19);
+        }
+
+        // 查找第一个未使用的兑换码
+        function findUnusedCode() {
+            var keys = Object.keys(VALID_CODES);
+            for (var i = 0; i < keys.length; i++) {
+                var key = keys[i];
+                if (!VALID_CODES[key].used) {
+                    return key;
+                }
+            }
+            return null;
+        }
+
+        // 分配兑换码给新用户
+        function assignCodeToUser(code) {
+            if (!VALID_CODES.hasOwnProperty(code)) return false;
+            
+            var codeData = VALID_CODES[code];
+            if (codeData.used) return false;
+            
+            codeData.used = true;
+            codeData.deviceId = deviceId;
+            codeData.activateTime = Date.now();
+            
+            activationData = {
+                code: code,
+                deviceId: deviceId,
+                activateTime: Date.now()
+            };
+            
+            localStorage.setItem('dark_test_activation', JSON.stringify(activationData));
+            return true;
         }
 
         function showError(message) {
