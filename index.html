@@ -115,44 +115,43 @@
             margin-bottom: 35px;
         }
 
-        .input-area {
+        .code-display {
             width: 100%;
             margin-bottom: 25px;
-        }
-
-        .input-label {
-            display: block;
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 12px;
-            text-align: left;
-            letter-spacing: 1px;
-        }
-
-        .code-input {
-            width: 100%;
-            height: 54px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(180, 50, 120, 0.3);
+            padding: 20px;
+            background: rgba(180, 50, 120, 0.15);
             border-radius: 14px;
-            padding: 0 20px;
-            font-size: 16px;
-            color: #f0f0f5;
-            text-align: center;
-            letter-spacing: 3px;
-            outline: none;
-            transition: all 0.3s ease;
+            border: 2px solid rgba(180, 50, 120, 0.3);
+        }
+
+        .code-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .code-value {
+            font-size: 22px;
+            font-weight: 700;
             font-family: 'Courier New', monospace;
+            color: #e040fb;
+            letter-spacing: 3px;
         }
 
-        .code-input:focus {
-            border-color: #e040fb;
-            box-shadow: 0 0 25px rgba(224, 64, 251, 0.25);
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(224, 64, 251, 0.3);
+            border-radius: 50%;
+            border-top-color: #e040fb;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+            vertical-align: middle;
         }
 
-        .code-input::placeholder {
-            color: #555;
-            letter-spacing: 2px;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .btn-primary {
@@ -176,8 +175,10 @@
             box-shadow: 0 12px 40px rgba(124, 77, 255, 0.5);
         }
 
-        .btn-primary:active {
-            transform: scale(0.98);
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .info-cards {
@@ -605,14 +606,14 @@
                 <span style="color: #e040fb;">权谋、欲望与真实自我</span>
             </p>
             
-            <div class="input-area">
-                <label class="input-label">请输入兑换码</label>
-                <input type="text" class="code-input" id="codeInput" 
-                       placeholder="XXXX-XXXX-XXXX" maxlength="14" 
-                       oninput="formatCode(this)">
+            <div class="code-display">
+                <div class="code-label">您的专属兑换码</div>
+                <div class="code-value" id="codeValue">
+                    <span class="loading"></span>正在获取...
+                </div>
             </div>
             
-            <button class="btn-primary" id="startBtn" onclick="startTest()">
+            <button class="btn-primary" id="startBtn" onclick="startTest()" disabled>
                 开始探索
             </button>
             
@@ -638,10 +639,10 @@
             <div class="tips">
                 <div class="tips-title">💡 使用说明</div>
                 <div class="tips-text">
-                    1. 购买后直接点击链接进入<br>
-                    2. 系统自动分配兑换码<br>
-                    3. 点击开始探索即可测试<br>
-                    4. 24小时内可重复测试
+                    1. 系统自动为您分配专属兑换码<br>
+                    2. 点击开始探索即可测试<br>
+                    3. 同一设备可重复测试<br>
+                    4. 24小时后自动释放兑换码
                 </div>
             </div>
         </div>
@@ -705,65 +706,6 @@
     <div class="error-toast" id="errorToast"></div>
 
     <script>
-        var VALID_CODES = {
-            // 演示码（测试用）
-            'TEST-1234-5678': { used: false, deviceId: null, activateTime: null },
-            'FREE-0000-0001': { used: false, deviceId: null, activateTime: null },
-            'DEMO-9999-9999': { used: false, deviceId: null, activateTime: null },
-            
-            // 销售兑换码（A001批次）
-            'A001-0001-0001': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0002': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0003': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0004': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0005': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0006': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0007': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0008': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0009': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0010': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0011': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0012': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0013': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0014': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0015': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0016': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0017': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0018': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0019': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0020': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0021': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0022': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0023': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0024': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0025': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0026': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0027': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0028': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0029': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0030': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0031': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0032': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0033': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0034': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0035': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0036': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0037': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0038': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0039': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0040': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0041': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0042': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0043': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0044': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0045': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0046': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0047': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0048': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0049': { used: false, deviceId: null, activateTime: null },
-            'A001-0001-0050': { used: false, deviceId: null, activateTime: null }
-        };
-
         var questions = [
             {
                 text: "你是否会为了获得更多资源或利益，而主动疏远那些'没用'的人？",
@@ -1002,30 +944,8 @@
 
         var currentQuestion = 0;
         var answers = [];
-        var deviceId = null;
-        var activationData = null;
-
-        function generateDeviceId() {
-            var components = [
-                navigator.userAgent,
-                navigator.language,
-                screen.colorDepth,
-                screen.width + 'x' + screen.height,
-                new Date().getTimezoneOffset(),
-                navigator.hardwareConcurrency || 0
-            ];
-            
-            var hash = 0;
-            for (var i = 0; i < components.length; i++) {
-                var str = String(components[i]);
-                for (var j = 0; j < str.length; j++) {
-                    var char = str.charCodeAt(j);
-                    hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash;
-                }
-            }
-            return 'DEV_' + Math.abs(hash).toString(16).toUpperCase();
-        }
+        var userCode = null;
+        var isCodeReady = false;
 
         function createStars() {
             var container = document.getElementById('particles');
@@ -1041,106 +961,6 @@
             }
         }
 
-        window.onload = function() {
-            createStars();
-            deviceId = generateDeviceId();
-            
-            // 1. 检查URL参数中的兑换码（用于手动分发场景）
-            var urlParams = new URLSearchParams(window.location.search);
-            var urlCode = urlParams.get('code');
-            
-            if (urlCode) {
-                var codeInput = document.getElementById('codeInput');
-                codeInput.value = urlCode.toUpperCase();
-                codeInput.disabled = true;
-                console.log('URL兑换码已自动填充:', urlCode);
-                return;
-            }
-            
-            // 2. 检查localStorage中的激活状态（返回用户）
-            var savedData = localStorage.getItem('dark_test_activation');
-            if (savedData) {
-                try {
-                    activationData = JSON.parse(savedData);
-                    var now = Date.now();
-                    var expireTime = 24 * 60 * 60 * 1000;
-                    if (now - activationData.activateTime < expireTime) {
-                        document.getElementById('codeInput').value = activationData.code;
-                        document.getElementById('codeInput').disabled = true;
-                        console.log('返回用户，使用已分配的兑换码:', activationData.code);
-                        return;
-                    } else {
-                        localStorage.removeItem('dark_test_activation');
-                        activationData = null;
-                    }
-                } catch (e) {
-                    console.error('解析激活数据失败', e);
-                }
-            }
-            
-            // 3. 新用户自动分配兑换码（全自动场景）
-            // 当用户通过通用链接访问时，系统自动分配未使用的兑换码
-            var unusedCode = findUnusedCode();
-            if (unusedCode) {
-                var success = assignCodeToUser(unusedCode);
-                if (success) {
-                    var codeInput = document.getElementById('codeInput');
-                    codeInput.value = unusedCode;
-                    codeInput.disabled = true;
-                    console.log('系统自动分配兑换码:', unusedCode);
-                } else {
-                    console.error('兑换码分配失败');
-                }
-            } else {
-                console.warn('所有兑换码已分配完毕');
-            }
-        };
-
-        function formatCode(input) {
-            var value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-            if (value.length > 14) value = value.substring(0, 14);
-            
-            var parts = [];
-            for (var i = 0; i < value.length; i += 4) {
-                parts.push(value.substring(i, i + 4));
-            }
-            
-            input.value = parts.join('-').substring(0, 19);
-        }
-
-        // 查找第一个未使用的兑换码
-        function findUnusedCode() {
-            var keys = Object.keys(VALID_CODES);
-            for (var i = 0; i < keys.length; i++) {
-                var key = keys[i];
-                if (!VALID_CODES[key].used) {
-                    return key;
-                }
-            }
-            return null;
-        }
-
-        // 分配兑换码给新用户
-        function assignCodeToUser(code) {
-            if (!VALID_CODES.hasOwnProperty(code)) return false;
-            
-            var codeData = VALID_CODES[code];
-            if (codeData.used) return false;
-            
-            codeData.used = true;
-            codeData.deviceId = deviceId;
-            codeData.activateTime = Date.now();
-            
-            activationData = {
-                code: code,
-                deviceId: deviceId,
-                activateTime: Date.now()
-            };
-            
-            localStorage.setItem('dark_test_activation', JSON.stringify(activationData));
-            return true;
-        }
-
         function showError(message) {
             var toast = document.getElementById('errorToast');
             toast.textContent = message;
@@ -1150,57 +970,58 @@
             }, 3000);
         }
 
-        function startTest() {
-            var code = document.getElementById('codeInput').value.trim();
-            
-            if (!code) {
-                showError('请输入兑换码');
-                return;
-            }
-            
-            if (!VALID_CODES.hasOwnProperty(code)) {
-                if (activationData && activationData.code === code) {
-                    startQuiz(code);
-                    return;
-                }
-                showError('兑换码无效，请检查后重新输入');
-                return;
-            }
-            
-            var codeData = VALID_CODES[code];
-            
-            if (codeData.used) {
-                if (codeData.deviceId === deviceId) {
-                    var now = Date.now();
-                    var expireTime = 24 * 60 * 60 * 1000;
-                    if (now - codeData.activateTime < expireTime) {
-                        startQuiz(code);
-                        return;
-                    } else {
-                        showError('兑换码已过期，请重新购买');
-                        return;
-                    }
-                } else {
-                    showError('该兑换码已在其他设备上使用');
-                    return;
-                }
-            }
-            
-            codeData.used = true;
-            codeData.deviceId = deviceId;
-            codeData.activateTime = Date.now();
-            
-            activationData = {
-                code: code,
-                deviceId: deviceId,
-                activateTime: Date.now()
-            };
-            localStorage.setItem('dark_test_activation', JSON.stringify(activationData));
-            
-            startQuiz(code);
+        function getApiUrl(action) {
+            return '/api/assign-code?action=' + action;
         }
 
-        function startQuiz(code) {
+        function fetchCode() {
+            var codeValue = document.getElementById('codeValue');
+            var startBtn = document.getElementById('startBtn');
+            
+            var urlParams = new URLSearchParams(window.location.search);
+            var urlCode = urlParams.get('code');
+            
+            var apiUrl = getApiUrl('getCode');
+            if (urlCode) {
+                apiUrl += '&code=' + encodeURIComponent(urlCode);
+            }
+            
+            fetch(apiUrl)
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        userCode = data.code;
+                        isCodeReady = true;
+                        codeValue.innerHTML = userCode;
+                        startBtn.disabled = false;
+                        startBtn.textContent = '开始探索';
+                    } else {
+                        codeValue.textContent = '获取失败';
+                        showError(data.message || '无法获取兑换码');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('API请求失败:', error);
+                    // 如果API失败，显示演示码
+                    userCode = 'DEMO-TEST-0001';
+                    isCodeReady = true;
+                    codeValue.textContent = userCode + ' (演示模式)';
+                    startBtn.disabled = false;
+                    startBtn.textContent = '开始探索';
+                });
+        }
+
+        window.onload = function() {
+            createStars();
+            fetchCode();
+        };
+
+        function startTest() {
+            if (!isCodeReady) {
+                showError('正在获取兑换码，请稍候...');
+                return;
+            }
+            
             currentQuestion = 0;
             answers = new Array(questions.length).fill(null);
             
@@ -1242,7 +1063,6 @@
                 optionsContainer.appendChild(optionEl);
             });
             
-            // Update navigation buttons
             updateNavButtons();
         }
 
@@ -1264,7 +1084,6 @@
                 currentQuestion--;
                 updateProgress();
                 showQuestion(currentQuestion);
-                updateNavButtons();
             }
         }
 
@@ -1273,9 +1092,7 @@
                 currentQuestion++;
                 updateProgress();
                 showQuestion(currentQuestion);
-                updateNavButtons();
             } else {
-                // Check if all questions are answered
                 var allAnswered = answers.every(function(a) { return a !== null; });
                 if (allAnswered) {
                     calculateResult();
@@ -1289,10 +1106,8 @@
             var prevBtn = document.getElementById('prevBtn');
             var nextBtn = document.getElementById('nextBtn');
             
-            // Update prev button
             prevBtn.disabled = currentQuestion === 0;
             
-            // Update next button text
             if (currentQuestion === questions.length - 1) {
                 nextBtn.textContent = '完成测试 →';
             } else {

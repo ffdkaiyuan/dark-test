@@ -1,0 +1,13 @@
+{
+  "name": "dark-personality-test",
+  "version": "1.0.0",
+  "description": "黑暗人格测试 - Vercel版本",
+  "main": "api/assign-code.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "vercel": "^32.0.0"
+  }
+}
