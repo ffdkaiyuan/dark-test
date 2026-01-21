@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>黑暗人格测试 | 深度心理分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1525 50%, #0d0d15 100%);
+            min-height: 100vh;
+            color: #f0f0f5;
+            overflow-x: hidden;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(180, 60, 120, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-30px) rotate(180deg); opacity: 0.8; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .home-content {
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+
+        .logo-area {
+            margin-bottom: 35px;
+        }
+
+        .logo-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, rgba(180, 50, 100, 0.3) 0%, rgba(100, 40, 120, 0.3) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            box-shadow: 0 0 40px rgba(160, 50, 110, 0.3);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 40px rgba(160, 50, 110, 0.3);
+            }
+            50% { 
+                transform: scale(1.05); 
+                box-shadow: 0 0 60px rgba(160, 50, 110, 0.5);
+            }
+        }
+
+        .main-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #e040fb 0%, #7c4dff 50%, #ff4081 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 25px;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 35px;
+        }
+
+        .input-area {
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 12px;
+            text-align: left;
+            letter-spacing: 1px;
+        }
+
+        .code-input {
+            width: 100%;
+            height: 54px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(180, 50, 120, 0.3);
+            border-radius: 14px;
+            padding: 0 20px;
+            font-size: 16px;
+            color: #f0f0f5;
+            text-align: center;
+            letter-spacing: 3px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-input:focus {
+            border-color: #e040fb;
+            box-shadow: 0 0 25px rgba(224, 64, 251, 0.25);
+        }
+
+        .code-input::placeholder {
+            color: #555;
+            letter-spacing: 2px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            height: 54px;
+            background: linear-gradient(135deg, #e040fb 0%, #7c4dff 100%);
+            border: none;
+            border-radius: 27px;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(124, 77, 255, 0.4);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(124, 77, 255, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .info-cards {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .info-card {
+            padding: 15px;
+            background: rgba(180, 50, 120, 0.1);
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(180, 50, 120, 0.15);
+        }
+
+        .info-card-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .info-card-text {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .tips {
+            width: 100%;
+            padding: 20px;
+            background: rgba(124, 77, 255, 0.08);
+            border-radius: 14px;
+            text-align: left;
+            border: 1px solid rgba(124, 77, 255, 0.15);
+        }
+
+        .tips-title {
+            font-size: 13px;
+            color: #e040fb;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tips-text {
+            font-size: 12px;
+            color: #777;
+            line-height: 1.9;
+        }
+
+        .quiz-page, .result-page {
+            display: none;
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .quiz-page.active, .result-page.active {
+            display: block;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e040fb 0%, #ff4081 100%);
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 28px 22px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(180, 50, 120, 0.15);
+        }
+
+        .question-number {
+            font-size: 12px;
+            color: #e040fb;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #f0f0f5;
+            margin-bottom: 25px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: #ccc;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .option:hover {
+            background: rgba(180, 50, 120, 0.15);
+            border-color: rgba(180, 50, 120, 0.3);
+            color: #fff;
+        }
+
+        .option.selected {
+            background: rgba(180, 50, 120, 0.25);
+            border-color: #e040fb;
+            color: #fff;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            color: #ccc;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(180, 50, 120, 0.2);
+            border-color: rgba(180, 50, 120, 0.3);
+            color: #fff;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.98);
+        }
+
+        .nav-btn.prev-btn:hover {
+            background: rgba(124, 77, 255, 0.2);
+            border-color: rgba(124, 77, 255, 0.3);
+        }
+
+        .nav-btn.next-btn {
+            background: linear-gradient(135deg, #e040fb 0%, #7c4dff 100%);
+            border: none;
+            color: #fff;
+        }
+
+        .nav-btn.next-btn:hover {
+            box-shadow: 0 5px 20px rgba(224, 64, 251, 0.3);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .nav-btn:disabled:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #ccc;
+            box-shadow: none;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 22px;
+            background: linear-gradient(135deg, #e040fb 0%, #ff4081 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .result-subtitle {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .score-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 18px;
+            text-align: center;
+            border: 1px solid rgba(180, 50, 120, 0.15);
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: conic-gradient(#e040fb 0deg, #e040fb calc(var(--score) * 3.6deg), rgba(255,255,255,0.1) calc(var(--score) * 3.6deg), rgba(255,255,255,0.1) 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(224, 64, 251, 0.2);
+        }
+
+        .score-inner {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a1525 0%, #0d0d15 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-value {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #e040fb 0%, #ff4081 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-label {
+            font-size: 11px;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .radar-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(180, 50, 120, 0.15);
+        }
+
+        .radar-chart {
+            width: 100%;
+            height: 300px;
+        }
+
+        .dimensions {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(180, 50, 120, 0.15);
+        }
+
+        .dimensions-title {
+            font-size: 15px;
+            color: #e040fb;
+            margin-bottom: 18px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .dimension-item {
+            margin-bottom: 16px;
+        }
+
+        .dimension-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .dimension-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .dimension-name {
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        .dimension-score {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ff4081;
+        }
+
+        .dimension-bar {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .dimension-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7c4dff 0%, #e040fb 50%, #ff4081 100%);
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        .interpretation {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(180, 50, 120, 0.15);
+        }
+
+        .interpretation-title {
+            font-size: 15px;
+            color: #e040fb;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .interpretation-text {
+            font-size: 13px;
+            color: #999;
+            line-height: 1.9;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            height: 48px;
+            background: rgba(180, 50, 120, 0.15);
+            border: 1px solid rgba(180, 50, 120, 0.25);
+            border-radius: 24px;
+            color: #f0f0f5;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(180, 50, 120, 0.25);
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.98);
+        }
+
+        .error-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(220, 40, 80, 0.95);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            text-align: center;
+            max-width: 85%;
+        }
+
+        .error-toast.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 400px) {
+            .main-title { font-size: 26px; }
+            .question-text { font-size: 16px; }
+            .score-value { font-size: 36px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container" id="homePage">
+        <div class="home-content">
+            <div class="logo-area">
+                <div class="logo-icon">🎭</div>
+                <h1 class="main-title">黑暗人格测试</h1>
+                <p class="subtitle">深度心理分析 · 10维人格画像</p>
+            </div>
+            
+            <p class="tagline">
+                探索你内心深处的<br>
+                <span style="color: #e040fb;">权谋、欲望与真实自我</span>
+            </p>
+            
+            <div class="input-area">
+                <label class="input-label">请输入兑换码</label>
+                <input type="text" class="code-input" id="codeInput" 
+                       placeholder="XXXX-XXXX-XXXX" maxlength="14" 
+                       oninput="formatCode(this)">
+            </div>
+            
+            <button class="btn-primary" id="startBtn" onclick="startTest()">
+                开始探索
+            </button>
+            
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-card-icon">📊</div>
+                    <div class="info-card-text">10维分析</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">⚡</div>
+                    <div class="info-card-text">秒出报告</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">🔬</div>
+                    <div class="info-card-text">专业算法</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">🎯</div>
+                    <div class="info-card-text">精准画像</div>
+                </div>
+            </div>
+            
+            <div class="tips">
+                <div class="tips-title">💡 使用说明</div>
+                <div class="tips-text">
+                    1. 购买后自动获取兑换码<br>
+                    2. 输入兑换码开始测试<br>
+                    3. 一个兑换码仅限一台设备<br>
+                    4. 24小时内可重复测试
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-page" id="quizPage">
+        <div class="quiz-header">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text" id="progressText">第 1 / 20 题</div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-number" id="questionNumber">问题 1</div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options" id="optionsContainer"></div>
+            
+            <div class="navigation">
+                <button class="nav-btn prev-btn" id="prevBtn" onclick="prevQuestion()">← 上一题</button>
+                <button class="nav-btn next-btn" id="nextBtn" onclick="nextQuestion()">下一题 →</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="result-page" id="resultPage">
+        <div class="result-header">
+            <h1 class="result-title">你的黑暗人格画像</h1>
+            <p class="result-subtitle" id="resultSubtitle"></p>
+        </div>
+        
+        <div class="score-card">
+            <div class="score-circle" id="scoreCircle" style="--score: 0">
+                <div class="score-inner">
+                    <div class="score-value" id="totalScore">0</div>
+                    <div class="score-label">DARK INDEX</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="radar-container">
+            <div class="radar-chart" id="radarChart"></div>
+        </div>
+        
+        <div class="dimensions">
+            <div class="dimensions-title">📈 各维度分析</div>
+            <div id="dimensionsContainer"></div>
+        </div>
+        
+        <div class="interpretation">
+            <div class="interpretation-title">🔮 综合解读</div>
+            <div class="interpretation-text" id="interpretationText"></div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn-secondary" onclick="copyResult()">分享结果</button>
+            <button class="btn-secondary" onclick="goHome()">返回首页</button>
+        </div>
+    </div>
+
+    <div class="error-toast" id="errorToast"></div>
+
+    <script>
+        var VALID_CODES = {
+            'TEST-1234-5678': { used: false, deviceId: null, activateTime: null },
+            'FREE-0000-0001': { used: false, deviceId: null, activateTime: null },
+            'DEMO-9999-9999': { used: false, deviceId: null, activateTime: null }
+        };
+
+        var questions = [
+            {
+                text: "你是否会为了获得更多资源或利益，而主动疏远那些'没用'的人？",
+                dimensions: ['egoism', 'greed'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "当你看到别人拥有你渴望的东西时，你是否会感到强烈的嫉妒和不满？",
+                dimensions: ['greed', 'narcissism'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "你认为在竞争中，'善良'和'诚实'往往是失败的代名词吗？",
+                dimensions: ['machiavellianism', 'morality'],
+                options: [
+                    { text: "完全不认同", score: 1 },
+                    { text: "很少认同", score: 2 },
+                    { text: "中立", score: 3 },
+                    { text: "比较认同", score: 4 },
+                    { text: "完全认同", score: 5 }
+                ]
+            },
+            {
+                text: "你是否经常为自己的不当行为找到'合理'的借口？",
+                dimensions: ['morality', 'psychopathy'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "你是否认为，自己比大多数人都更优秀、更有资格获得成功？",
+                dimensions: ['narcissism', 'entitlement'],
+                options: [
+                    { text: "完全不认同", score: 1 },
+                    { text: "很少认同", score: 2 },
+                    { text: "中立", score: 3 },
+                    { text: "比较认同", score: 4 },
+                    { text: "完全认同", score: 5 }
+                ]
+            },
+            {
+                text: "你是否觉得，世界应该围着你转，而别人应该无条件满足你的需求？",
+                dimensions: ['entitlement', 'narcissism'],
+                options: [
+                    { text: "完全不认同", score: 1 },
+                    { text: "很少认同", score: 2 },
+                    { text: "中立", score: 3 },
+                    { text: "比较认同", score: 4 },
+                    { text: "完全认同", score: 5 }
+                ]
+            },
+            {
+                text: "当你伤害了别人，你是否很难感到真正的愧疚或自责？",
+                dimensions: ['psychopathy', 'morality'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "你是否在日常生活中，偶尔会有想看到他人痛苦或难过的冲动？",
+                dimensions: ['sadism', 'spitefulness'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "在做决定时，你是否总是优先考虑自己的利益，而很少顾及他人感受？",
+                dimensions: ['selfish', 'egoism'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "即使知道会伤害到对方，你是否也会毫不犹豫地追求自己想要的东西？",
+                dimensions: ['spitefulness', 'greed'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "你是否善于用'善意'的谎言来操控他人，达到自己的目的？",
+                dimensions: ['machiavellianism', 'sadism'],
+                options: [
+                    { text: "完全不擅长", score: 1 },
+                    { text: "很少擅长", score: 2 },
+                    { text: "一般", score: 3 },
+                    { text: "比较擅长", score: 4 },
+                    { text: "非常擅长", score: 5 }
+                ]
+            },
+            {
+                text: "你是否觉得大多数人都是愚蠢的，很容易被利用？",
+                dimensions: ['machiavellianism', 'narcissism'],
+                options: [
+                    { text: "完全不认同", score: 1 },
+                    { text: "很少认同", score: 2 },
+                    { text: "中立", score: 3 },
+                    { text: "比较认同", score: 4 },
+                    { text: "完全认同", score: 5 }
+                ]
+            },
+            {
+                text: "你是否经常觉得规则是为普通人制定的，而你有特权不遵守？",
+                dimensions: ['entitlement', 'machiavellianism'],
+                options: [
+                    { text: "完全不认同", score: 1 },
+                    { text: "很少认同", score: 2 },
+                    { text: "中立", score: 3 },
+                    { text: "比较认同", score: 4 },
+                    { text: "完全认同", score: 5 }
+                ]
+            },
+            {
+                text: "你是否会在别人困难时，不仅不帮忙，反而幸灾乐祸？",
+                dimensions: ['sadism', 'psychopathy'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "你是否很难真正理解他人的感受和痛苦？",
+                dimensions: ['psychopathy', 'selfish'],
+                options: [
+                    { text: "完全能理解", score: 1 },
+                    { text: "大多能理解", score: 2 },
+                    { text: "一般", score: 3 },
+                    { text: "较少理解", score: 4 },
+                    { text: "完全不能", score: 5 }
+                ]
+            },
+            {
+                text: "当你获得成功时，你是否觉得都是自己的功劳，与他人无关？",
+                dimensions: ['narcissism', 'selfish'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "你是否经常觉得别人的问题和烦恼很无聊，不值得你关心？",
+                dimensions: ['selfish', 'psychopathy'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "你是否会觉得，为了'更大的利益'，牺牲少数人是完全可以接受的？",
+                dimensions: ['machiavellianism', 'spitefulness'],
+                options: [
+                    { text: "完全不接受", score: 1 },
+                    { text: "很少接受", score: 2 },
+                    { text: "中立", score: 3 },
+                    { text: "比较接受", score: 4 },
+                    { text: "完全接受", score: 5 }
+                ]
+            },
+            {
+                text: "你是否渴望拥有更多的权力、金钱或地位，即使这意味着要伤害他人？",
+                dimensions: ['greed', 'entitlement'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            },
+            {
+                text: "当你不喜欢一个人时，你是否会想办法让他/她在社交圈中难堪或被孤立？",
+                dimensions: ['spitefulness', 'sadism'],
+                options: [
+                    { text: "完全不会", score: 1 },
+                    { text: "很少会", score: 2 },
+                    { text: "偶尔会", score: 3 },
+                    { text: "经常会", score: 4 },
+                    { text: "完全会", score: 5 }
+                ]
+            }
+        ];
+
+        var dimensions = {
+            egoism: { name: '利己主义', color: '#7c4dff' },
+            greed: { name: '贪婪', color: '#e040fb' },
+            machiavellianism: { name: '马基雅维利主义', color: '#ff4081' },
+            morality: { name: '道德推脱', color: '#ff4081' },
+            narcissism: { name: '自恋', color: '#e040fb' },
+            entitlement: { name: '心理权力', color: '#7c4dff' },
+            psychopathy: { name: '精神变态', color: '#ff4081' },
+            sadism: { name: '施虐倾向', color: '#e040fb' },
+            selfish: { name: '自我为中心', color: '#7c4dff' },
+            spitefulness: { name: '恶毒倾向', color: '#ff4081' }
+        };
+
+        var currentQuestion = 0;
+        var answers = [];
+        var deviceId = null;
+        var activationData = null;
+
+        function generateDeviceId() {
+            var components = [
+                navigator.userAgent,
+                navigator.language,
+                screen.colorDepth,
+                screen.width + 'x' + screen.height,
+                new Date().getTimezoneOffset(),
+                navigator.hardwareConcurrency || 0
+            ];
+            
+            var hash = 0;
+            for (var i = 0; i < components.length; i++) {
+                var str = String(components[i]);
+                for (var j = 0; j < str.length; j++) {
+                    var char = str.charCodeAt(j);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+            }
+            return 'DEV_' + Math.abs(hash).toString(16).toUpperCase();
+        }
+
+        function createStars() {
+            var container = document.getElementById('particles');
+            for (var i = 0; i < 40; i++) {
+                var star = document.createElement('div');
+                star.className = 'particle';
+                star.style.left = (Math.random() * 100) + '%';
+                star.style.top = (Math.random() * 100) + '%';
+                star.style.width = (Math.random() * 4 + 2) + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = (Math.random() * 10) + 's';
+                container.appendChild(star);
+            }
+        }
+
+        window.onload = function() {
+            createStars();
+            deviceId = generateDeviceId();
+            
+            var savedData = localStorage.getItem('dark_test_activation');
+            if (savedData) {
+                try {
+                    activationData = JSON.parse(savedData);
+                    var now = Date.now();
+                    var expireTime = 24 * 60 * 60 * 1000;
+                    if (now - activationData.activateTime < expireTime) {
+                        document.getElementById('codeInput').value = activationData.code;
+                        document.getElementById('codeInput').disabled = true;
+                    } else {
+                        localStorage.removeItem('dark_test_activation');
+                        activationData = null;
+                    }
+                } catch (e) {
+                    console.error('解析激活数据失败', e);
+                }
+            }
+        };
+
+        function formatCode(input) {
+            var value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (value.length > 14) value = value.substring(0, 14);
+            
+            var parts = [];
+            for (var i = 0; i < value.length; i += 4) {
+                parts.push(value.substring(i, i + 4));
+            }
+            
+            input.value = parts.join('-').substring(0, 19);
+        }
+
+        function showError(message) {
+            var toast = document.getElementById('errorToast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function startTest() {
+            var code = document.getElementById('codeInput').value.trim();
+            
+            if (!code) {
+                showError('请输入兑换码');
+                return;
+            }
+            
+            if (!VALID_CODES.hasOwnProperty(code)) {
+                if (activationData && activationData.code === code) {
+                    startQuiz(code);
+                    return;
+                }
+                showError('兑换码无效，请检查后重新输入');
+                return;
+            }
+            
+            var codeData = VALID_CODES[code];
+            
+            if (codeData.used) {
+                if (codeData.deviceId === deviceId) {
+                    var now = Date.now();
+                    var expireTime = 24 * 60 * 60 * 1000;
+                    if (now - codeData.activateTime < expireTime) {
+                        startQuiz(code);
+                        return;
+                    } else {
+                        showError('兑换码已过期，请重新购买');
+                        return;
+                    }
+                } else {
+                    showError('该兑换码已在其他设备上使用');
+                    return;
+                }
+            }
+            
+            codeData.used = true;
+            codeData.deviceId = deviceId;
+            codeData.activateTime = Date.now();
+            
+            activationData = {
+                code: code,
+                deviceId: deviceId,
+                activateTime: Date.now()
+            };
+            localStorage.setItem('dark_test_activation', JSON.stringify(activationData));
+            
+            startQuiz(code);
+        }
+
+        function startQuiz(code) {
+            currentQuestion = 0;
+            answers = new Array(questions.length).fill(null);
+            
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('quizPage').classList.add('active');
+            
+            updateProgress();
+            showQuestion(0);
+        }
+
+        function updateProgress() {
+            var progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                '第 ' + (currentQuestion + 1) + ' / ' + questions.length + ' 题';
+        }
+
+        function showQuestion(index) {
+            var question = questions[index];
+            
+            document.getElementById('questionNumber').textContent = '问题 ' + (index + 1);
+            document.getElementById('questionText').textContent = question.text;
+            
+            var optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach(function(option, optIndex) {
+                var optionEl = document.createElement('button');
+                optionEl.className = 'option';
+                if (answers[index] === option.score) {
+                    optionEl.classList.add('selected');
+                }
+                optionEl.textContent = option.text;
+                optionEl.onclick = (function(score) {
+                    return function() {
+                        selectOption(score);
+                    };
+                })(option.score);
+                optionsContainer.appendChild(optionEl);
+            });
+            
+            // Update navigation buttons
+            updateNavButtons();
+        }
+
+        function selectOption(score) {
+            answers[currentQuestion] = score;
+            
+            var options = document.querySelectorAll('.option');
+            options.forEach(function(el, index) {
+                if (index === score - 1) {
+                    el.classList.add('selected');
+                } else {
+                    el.classList.remove('selected');
+                }
+            });
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                updateProgress();
+                showQuestion(currentQuestion);
+                updateNavButtons();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                updateProgress();
+                showQuestion(currentQuestion);
+                updateNavButtons();
+            } else {
+                // Check if all questions are answered
+                var allAnswered = answers.every(function(a) { return a !== null; });
+                if (allAnswered) {
+                    calculateResult();
+                } else {
+                    showError('请先完成所有题目');
+                }
+            }
+        }
+
+        function updateNavButtons() {
+            var prevBtn = document.getElementById('prevBtn');
+            var nextBtn = document.getElementById('nextBtn');
+            
+            // Update prev button
+            prevBtn.disabled = currentQuestion === 0;
+            
+            // Update next button text
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = '完成测试 →';
+            } else {
+                nextBtn.textContent = '下一题 →';
+            }
+        }
+
+        function calculateResult() {
+            var dimensionScores = {};
+            var dimensionCounts = {};
+            
+            Object.keys(dimensions).forEach(function(key) {
+                dimensionScores[key] = 0;
+                dimensionCounts[key] = 0;
+            });
+            
+            questions.forEach(function(question, index) {
+                var score = answers[index];
+                if (score !== null) {
+                    question.dimensions.forEach(function(dim) {
+                        dimensionScores[dim] += score;
+                        dimensionCounts[dim]++;
+                    });
+                }
+            });
+            
+            var finalScores = {};
+            Object.keys(dimensions).forEach(function(key) {
+                var avg = dimensionCounts[key] > 0 ? dimensionScores[key] / dimensionCounts[key] : 0;
+                finalScores[key] = Math.round((avg - 1) / 4 * 100);
+            });
+            
+            var totalScore = Math.round(
+                Object.values(finalScores).reduce(function(a, b) {
+                    return a + b;
+                }, 0) / Object.keys(finalScores).length
+            );
+            
+            showResult(totalScore, finalScores);
+        }
+
+        function showResult(totalScore, dimensionScores) {
+            document.getElementById('quizPage').classList.remove('active');
+            document.getElementById('resultPage').classList.add('active');
+            
+            document.getElementById('totalScore').textContent = totalScore + '%';
+            document.getElementById('scoreCircle').style.setProperty('--score', totalScore);
+            
+            var level = '';
+            if (totalScore < 25) {
+                level = '阳光纯真型';
+            } else if (totalScore < 45) {
+                level = '现实理性型';
+            } else if (totalScore < 65) {
+                level = '精明策略型';
+            } else if (totalScore < 80) {
+                level = '权谋操控型';
+            } else {
+                level = '暗黑危险型';
+            }
+            document.getElementById('resultSubtitle').textContent = level;
+            
+            renderRadarChart(dimensionScores);
+            renderDimensions(dimensionScores);
+            renderInterpretation(totalScore, dimensionScores);
+        }
+
+        function renderRadarChart(scores) {
+            var chartDom = document.getElementById('radarChart');
+            var chart = echarts.init(chartDom);
+            
+            var indicator = Object.keys(dimensions).map(function(key) {
+                return { name: dimensions[key].name, max: 100 };
+            });
+            
+            var data = Object.keys(dimensions).map(function(key) {
+                return scores[key];
+            });
+            
+            var option = {
+                backgroundColor: 'transparent',
+                tooltip: {},
+                radar: {
+                    indicator: indicator,
+                    shape: 'polygon',
+                    splitNumber: 4,
+                    axisName: { color: '#999', fontSize: 11 },
+                    splitLine: { lineStyle: { color: 'rgba(180, 50, 120, 0.2)' } },
+                    splitArea: { show: false },
+                    axisLine: { lineStyle: { color: 'rgba(180, 50, 120, 0.3)' } }
+                },
+                series: [{
+                    type: 'radar',
+                    data: [{
+                        value: data,
+                        name: '维度得分',
+                        areaStyle: { color: 'rgba(224, 64, 251, 0.3)' },
+                        lineStyle: { color: '#e040fb', width: 2 },
+                        itemStyle: { color: '#e040fb' }
+                    }]
+                }]
+            };
+            
+            chart.setOption(option);
+            window.addEventListener('resize', function() { chart.resize(); });
+        }
+
+        function renderDimensions(scores) {
+            var container = document.getElementById('dimensionsContainer');
+            container.innerHTML = '';
+            
+            Object.keys(dimensions).forEach(function(key) {
+                var dim = dimensions[key];
+                var score = scores[key];
+                
+                var item = document.createElement('div');
+                item.className = 'dimension-item';
+                item.innerHTML = 
+                    '<div class="dimension-header">' +
+                    '<span class="dimension-name" style="color:' + dim.color + '">' + dim.name + '</span>' +
+                    '<span class="dimension-score">' + score + '</span>' +
+                    '</div>' +
+                    '<div class="dimension-bar">' +
+                    '<div class="dimension-fill" style="width: ' + score + '%"></div>' +
+                    '</div>';
+                container.appendChild(item);
+            });
+        }
+
+        function renderInterpretation(totalScore, scores) {
+            var interpretations = [];
+            
+            if (scores.egoism > 50) interpretations.push('利己主义');
+            if (scores.greed > 60) interpretations.push('贪婪');
+            if (scores.machiavellianism > 55) interpretations.push('马基雅维利主义');
+            if (scores.morality > 50) interpretations.push('道德推脱');
+            if (scores.narcissism > 50) interpretations.push('自恋');
+            if (scores.entitlement > 50) interpretations.push('心理权力');
+            if (scores.psychopathy > 45) interpretations.push('精神变态');
+            if (scores.sadism > 40) interpretations.push('施虐倾向');
+            if (scores.selfish > 50) interpretations.push('自我为中心');
+            if (scores.spitefulness > 40) interpretations.push('恶毒倾向');
+            
+            var text = '';
+            if (totalScore < 25) {
+                text = '你的黑暗人格指数仅为 ' + totalScore + '%，整体偏向阳光和善。你是一个真诚、富有同理心的人，很难做出伤害他人的事情。你的世界充满了信任和善意，这是非常珍贵的品质。';
+            } else if (totalScore < 45) {
+                text = '你的黑暗人格指数为 ' + totalScore + '%，处于正常偏高的水平。你具备一定的现实主义和自我保护意识，但内心仍保持着基本的善良和道德底线。';
+            } else if (totalScore < 65) {
+                text = '你的黑暗人格指数为 ' + totalScore + '%，显示出明显的现实主义倾向。你懂得在适当的时候运用策略来保护自己和争取利益，但并非完全不顾他人感受。';
+            } else if (totalScore < 80) {
+                text = '你的黑暗人格指数高达 ' + totalScore + '%，表明你内心深处有着强烈的操控欲和占有欲。你善于利用他人为自己的目标服务，在竞争中往往占据优势。';
+            } else {
+                text = '你的黑暗人格指数爆表，达到 ' + totalScore + '%！这是一个极高的分数，表明你在多个维度上都表现出明显的黑暗人格特征。';
+            }
+            
+            if (interpretations.length > 0) {
+                text += '\n\n你的突出特征：' + interpretations.join('、');
+            }
+            
+            document.getElementById('interpretationText').textContent = text;
+        }
+
+        function copyResult() {
+            var score = document.getElementById('totalScore').textContent;
+            var level = document.getElementById('resultSubtitle').textContent;
+            var text = '黑暗人格测试\n得分：' + score + '\n类型：' + level + '\n10维深度分析，揭示真实自我';
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showError('已复制到剪贴板');
+                });
+            } else {
+                showError('复制失败，请手动复制');
+            }
+        }
+
+        function goHome() {
+            document.getElementById('resultPage').classList.remove('active');
+            document.getElementById('homePage').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
